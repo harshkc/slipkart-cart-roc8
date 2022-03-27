@@ -12,10 +12,27 @@ const stateReducer = (state, action) => {
   const {type, payload} = action;
   switch (type) {
     case "ADD_TO_CART":
+      const itemInCart = state.cart.find((item) => item.id === payload.id);
+      if (itemInCart) {
+        return {
+          ...state,
+          cart: state.cart.map((item) => {
+            if (item.id === payload.id) {
+              return {
+                ...item,
+                qty: (item?.qty ?? 1) + 1,
+              };
+            }
+            return item;
+          }),
+        };
+      }
+
       return {
         ...state,
-        cart: [...state.cart, {...payload, qty: 1}],
+        cart: [...state.cart, payload],
       };
+
     case "REMOVE_FROM_CART":
       return {
         ...state,
@@ -48,6 +65,24 @@ const stateReducer = (state, action) => {
         saveItemsCart: [...state.saveItemsCart, payload],
       };
     case "MOVE_TO_CART":
+      //check if item already in cart and then increase qty
+      const isItemInCart = state.cart.find((item) => item.id === payload.id);
+      if (isItemInCart) {
+        return {
+          ...state,
+          cart: state.cart.map((item) => {
+            if (item.id === payload.id) {
+              return {
+                ...item,
+                qty: (item?.qty ?? 1) + 1,
+              };
+            }
+            return item;
+          }),
+          saveItemsCart: state.saveItemsCart.filter((item) => item.id !== payload.id),
+        };
+      }
+
       return {
         ...state,
         saveItemsCart: state.saveItemsCart.filter((item) => item.id !== payload.id),

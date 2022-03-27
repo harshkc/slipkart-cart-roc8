@@ -21,7 +21,7 @@ const CartItem = ({id, title, price, image, qty, savedItem}) => {
                 onClick={() => dispatch({type: "DECREMENT_ITEM", payload: id})}
                 className='increment-decrement-icon'
               />
-              {qty}
+              {qty ?? 1}
               <AiOutlinePlus
                 onClick={() => dispatch({type: "INCREMENT_ITEM", payload: id})}
                 className='increment-decrement-icon'
